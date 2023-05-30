@@ -1,13 +1,7 @@
 package com.alura.controller;
 
-import com.alura.domain.respuestas.DatosMostrarRespuesta;
-import com.alura.domain.respuestas.DatosRegistroRespuesta;
-import com.alura.domain.respuestas.Respuesta;
-import com.alura.domain.respuestas.RespuestaRepository;
-import com.alura.domain.topico.DatosTopicoConRespuestaEspecifica;
-import com.alura.domain.topico.DatosTopicoConRespuestas;
-import com.alura.domain.topico.Topico;
-import com.alura.domain.topico.TopicoRepository;
+import com.alura.domain.respuestas.*;
+import com.alura.domain.topico.*;
 import com.alura.domain.usuarios.DatosMostrarUsuario;
 import com.alura.domain.usuarios.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -94,7 +88,24 @@ public class RespuestaController {
     respuestaRepository.delete(respuesta);
 
     return ResponseEntity.noContent().build();
-}
 
 }
+    @PutMapping("{idTopico}/{idRespuesta}")
+    @Transactional
+    public ResponseEntity<DatosTopicoConRespuestaActualizada> actualizarRespuesta(@PathVariable Long idTopico,
+                                                                                  @PathVariable Long idRespuesta,
+    @RequestBody @Valid DatosActualizarRespuesta datosActualizarRespuesta) {
 
+        var topico = topicoRepository.getReferenceById(idTopico);
+        var respuesta = respuestaRepository.getReferenceById(idRespuesta);
+        respuesta.actualizarRespuesta(datosActualizarRespuesta);
+        var datosMostrarRespuesta = new DatosMostrarRespuesta(respuesta.getId(),respuesta.getMensaje(),respuesta.getFechaCreacion(),
+                new DatosMostrarUsuario(respuesta.getAutor().getId(),respuesta.getAutor().getNombre()),respuesta.getSolucion());
+        var datosTopicoConRespuestaActualizada = new DatosTopicoConRespuestaActualizada(topico.getId(),
+                topico.getTitulo(), topico.getMensaje(), topico.getFechaCreacion(),topico.getStatus(),
+                new DatosMostrarUsuario(topico.getAutor().getId(),topico.getAutor().getNombre()),topico.getCurso(),datosMostrarRespuesta);
+
+            return ResponseEntity.ok(datosTopicoConRespuestaActualizada);
+
+}
+}
