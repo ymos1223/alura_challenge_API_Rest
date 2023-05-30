@@ -4,6 +4,7 @@ import com.alura.domain.respuestas.DatosMostrarRespuesta;
 import com.alura.domain.respuestas.DatosRegistroRespuesta;
 import com.alura.domain.respuestas.Respuesta;
 import com.alura.domain.respuestas.RespuestaRepository;
+import com.alura.domain.topico.DatosTopicoConRespuestaEspecifica;
 import com.alura.domain.topico.DatosTopicoConRespuestas;
 import com.alura.domain.topico.Topico;
 import com.alura.domain.topico.TopicoRepository;
@@ -68,4 +69,20 @@ public class RespuestaController {
                 topico.getCurso(), datosRespuestas);
         return ResponseEntity.ok(datosTopicoConRespuestas);
     }
+
+@GetMapping("/{idTopico}/{idRespuesta}")
+    public ResponseEntity<DatosTopicoConRespuestaEspecifica> listarTopicoConIdEspecifico(@PathVariable Long idTopico,
+                                                                                         @PathVariable Long idRespuesta) {
+        var topico = topicoRepository.getReferenceById(idTopico);
+        var respuesta = respuestaRepository.getReferenceById(idRespuesta);
+    var datosMostrarRespuesta = new DatosMostrarRespuesta(respuesta.getId(), respuesta.getMensaje(), respuesta.getFechaCreacion(),
+            new DatosMostrarUsuario(respuesta.getAutor().getId(),respuesta.getAutor().getNombre()),respuesta.getSolucion());
+        var datosTopicoConRespuestaEspecifica = new DatosTopicoConRespuestaEspecifica(topico.getId(), topico.getTitulo(),
+                topico.getMensaje(),topico.getFechaCreacion(),topico.getStatus(), new DatosMostrarUsuario(respuesta.getAutor().getId(),
+                respuesta.getAutor().getNombre()),topico.getCurso(),List.of(datosMostrarRespuesta));
+
+    return ResponseEntity.ok(datosTopicoConRespuestaEspecifica);
 }
+
+}
+
