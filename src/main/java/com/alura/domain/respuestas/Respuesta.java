@@ -41,4 +41,15 @@ public class Respuesta {
 		this.autor = autor;
 		this.solucion = false;
 	}
+
+	public void actualizarRespuesta(DatosActualizarRespuesta datosActualizarRespuesta) {
+		if (datosActualizarRespuesta.mensaje() != null) {
+			this.mensaje = datosActualizarRespuesta.mensaje();
+		}
+
+		if (datosActualizarRespuesta.solucion() != null) {
+			this.solucion = datosActualizarRespuesta.solucion();
+		}
+
+	}
 }
