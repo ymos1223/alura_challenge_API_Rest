@@ -10,6 +10,7 @@ import com.alura.domain.topico.Topico;
 import com.alura.domain.topico.TopicoRepository;
 import com.alura.domain.usuarios.DatosMostrarUsuario;
 import com.alura.domain.usuarios.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -82,6 +83,17 @@ public class RespuestaController {
                 respuesta.getAutor().getNombre()),topico.getCurso(),List.of(datosMostrarRespuesta));
 
     return ResponseEntity.ok(datosTopicoConRespuestaEspecifica);
+}
+
+@DeleteMapping("{idTopico}/{idRespuesta}")
+    @Transactional
+    public ResponseEntity eliminarRespuesta(@PathVariable Long idTopico,
+                                            @PathVariable Long idRespuesta) {
+    var topico = topicoRepository.getReferenceById(idTopico);
+    var respuesta = respuestaRepository.getReferenceById(idRespuesta);
+    respuestaRepository.delete(respuesta);
+
+    return ResponseEntity.noContent().build();
 }
 
 }
