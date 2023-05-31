@@ -27,7 +27,7 @@ public class UsuarioController {
         this.usuarioRepository =usuarioRepository;
     }
 
-    @PostMapping
+    @PostMapping("/registro")
     public ResponseEntity<DatosRespuestaUsuario> registrarUsuario(@RequestBody @Valid DatosRegistroUsuario datosRegistroUsuario,
     UriComponentsBuilder uriComponentsBuilder  ) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
