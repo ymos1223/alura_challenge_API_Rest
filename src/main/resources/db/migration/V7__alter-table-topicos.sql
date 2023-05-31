@@ -1,3 +1,0 @@
-ALTER TABLE topicos MODIFY id_autor INT NOT NULL;
-
-ALTER TABLE respuestas MODIFY id_autor INT NOT NULL;
